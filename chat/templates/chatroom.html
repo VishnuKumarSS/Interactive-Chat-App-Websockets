@@ -62,7 +62,12 @@
         chatSocket.onmessage = function (a) {
             const data = JSON.parse(a.data);
             console.log(data)
-            document.querySelector('#chat-text').innerHTML += (data.username + ': ' + data.message + "\n")
+            document.querySelector('#chat-text').innerHTML += ( 
+                data.username ? 
+                data.username + ': ' + data.message + "\n"
+                : 
+                "anonymous: " + data.message + "\n" 
+                )
         }
     </script>
 
