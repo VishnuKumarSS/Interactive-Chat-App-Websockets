@@ -43,9 +43,7 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
         }))
         # the json dumps converts the python object to a json string .
 
-
-
-
+        # https://www.geeksforgeeks.org/json-dump-in-python/#:~:text=The%20dump()%20method%20is,be%20stored%20as%20an%20argument.
 
 
 
