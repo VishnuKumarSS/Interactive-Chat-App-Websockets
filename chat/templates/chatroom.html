@@ -17,15 +17,15 @@
     <div class="container">
         <div class="row d-flex justify-content-center">
             <div class="col-6">
-                <form>
-                    <div class="form-group">
+                <form >
+                    <div class="form-group" >
                         <center><label for="exampleFormControlTextarea1" class="h4 pt-5">CHATROOM</label></center>
-                        <p class="form-control" style="border: 3px solid #000; border-radius: 1rem; height: 300px; " id="chat-text" rows="10"></p><br>
+                        <textarea class="form-control" style="border: 3px solid #000; border-radius: 1rem; height: 300px; " id="chat-text" rows="10"></textarea><br>
                     </div>
                     <div class="form-group">
                         <input class="form-control" style="border: 3px solid #000; border-radius: 1rem;" id="input" type="text" placeholder="Enter your message here"></br>
                     </div>
-                    <input class="btn btn-primary btn-lg btn-block" style="border-radius: 1rem;" id="submit" type="button" value="Send">
+                    <button class="btn btn-primary btn-lg btn-block" style="border-radius: 1rem;" id="submit" type="submit">Send</button>
                 </form>
             </div>
         </div>
@@ -36,6 +36,8 @@
     <script>
         const user_username = JSON.parse(document.getElementById('user_username').textContent);
         document.querySelector('#submit').onclick = function (e) {
+            e.preventDefault()
+
             const messageInputDom = document.querySelector('#input');
             const message = messageInputDom.value;
             chatSocket.send(JSON.stringify({
@@ -60,7 +62,7 @@
         chatSocket.onmessage = function (a) {
             const data = JSON.parse(a.data);
             console.log(data)
-            document.querySelector('#chat-text').innerHTML += (data.username + ': ' + data.message + '\n')
+            document.querySelector('#chat-text').innerHTML += (data.username + ': ' + data.message + "\n")
         }
     </script>
 
