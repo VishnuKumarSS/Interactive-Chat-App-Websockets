@@ -1,47 +1,73 @@
-<html lang="en">
-
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
-    <title>Chat_App | Web_Socket</title>
-</head>
-
-<body>
-
+{% extends 'base.html' %}
+{% block title %}
+Chat_App | Web_Socket
+{% endblock title %}
+{% block stylebody %}
+.paragraph-div::-webkit-scrollbar {
+    display: none;
+  }
+{% endblock stylebody%}
+{% block content %}
+  {% if user.is_authenticated %}
     <div class="container">
         <div class="row d-flex justify-content-center">
             <div class="col-6">
-                
-                <form method="POST">
+                {% comment %} Below room is a url namespace...room_name is an view argument {% endcomment %}
+                <form action="{% url 'chat:room' room_name %}" method="POST">
                     {% comment %} <form action="{% url 'chat:room' %}" method="POST"> {% endcomment %}
                     {% csrf_token %}
                     <div class="form-group">
-                        <center><label for="exampleFormControlTextarea1" class="h4 pt-5">CHATROOM</label></center>
-                        <textarea class="form-control" style="border: 3px solid #000; border-radius: 1rem; height: 300px; " id="chat-text" rows="10"></textarea><br>
+                        <center >
+                            <p style="background-color:#fff; border: 3px solid #000; width: auto; font-weight: bold; font-size:2rem; border-radius:1rem; margin: 30px; position:relative; padding:0.5rem;">
+                                {{room_name}} - ROOM
+                            </p>
+                        </center>
+                        {% comment %} flex-direction: column-reverse; ----- It will reverse the whole div (reverse the elements inside the div if you've removed flex-direction){% endcomment %}
+                        <div class="paragraph-div" style="flex-direction: column-reverse; display: flex;  background-color: #fff;height:350px; overflow-y: auto;  border: 3px solid #000; border-radius: 1rem; padding:1rem;">
+                            <p id="chat-text"></p>
+
+                                {% for msg in all_messages %}
+                                    {% if msg.user.id is request.user.id%}
+                                        <p style='margin-bottom:10px; margin-left:auto; margin-right:0; background: #99ffaa; color: #000; width: fit-content; padding: 10px; border-radius: 1rem;'><strong style='color: #40489d'>{{msg.user.username | capfirst}}:</strong> {{msg.message}}</p>
+                                    {% else %}
+                                        <p style='margin-bottom:10px; background: #40489d; color: #fff; width: fit-content; padding: 10px; border-radius: 1rem;'><strong style='color: #99ffaa'>{{msg.user.username | capfirst}}:</strong> {{msg.message}}</p>
+                                    {% endif %}
+                                {% endfor %}
+                            {% comment %} {% else %} {% endcomment %}
+                                {% comment %} <h3>No message found. Start messaging.</h3> {% endcomment %}
+                            {% comment %} {% endif %} {% endcomment %}
+                            <h3 style="font-weight: bold;">{{date}}</h3>
+                        </div>
+
                     </div>
+
                     <div class="form-group">
-                        <label class="form-label">Type here.</label>
-                        <input name="msg" class="form-control" style="border: 3px solid #000; border-radius: 1rem;" id="input" type="text" placeholder="Enter your message here"></br>
+                        <input name="msg" class="form-control" style="height:60px; font-size: 20px;border: 3px solid #000; border-radius: 1rem;" id="input" type="text" placeholder="Enter your message here">
                     </div>
-                    <button class="btn btn-primary btn-lg btn-block" style="border-radius: 1rem;" id="submit" type="submit">Send</button>
+
+                    <center>
+                    <button style="color: #000; width:250px; font-size:22px; border-radius: 1rem; border: 3px solid #000; font-weight: bold; background-color: #90CAF9; padding: 10px;" id="submit" type="submit">Send</button>
+                    <center>
                 </form>
 
             </div>
         </div>
     </div>
-
     {{ request.user.username|json_script:"user_username" }}
+    {{ request.user.id|json_script:"user_id" }}
     {{ room_name|json_script:"room-name" }}
+    {% else %}
+    <center>
+    <h1 style='background:#EF5350; margin: 50px; border-radius: 1rem; padding:1rem; width: fit-content;'>Please try to login to view room messages.</h1>
+    <p style='margin-top: 10px; width:fit-content; color:#000; border-radius:1rem; background-color:#fff; padding:10px;' class="text-center">If you already have an account - <a style='text-decoration: none' href="/chat/signin">SignIn</a></p>
+    <p style='margin-top: 10px; width:fit-content; color:#000; border-radius:1rem; background-color:#fff; padding:10px;' class="text-center">Don't have an account? <a style='text-decoration: none' href="/chat/signup">Signup</a></p>    
+    </center>
+    {% endif %}
     <script>
         const user_username = JSON.parse(document.getElementById('user_username').textContent);
+        const user_id = JSON.parse(document.getElementById('user_id').textContent);
         document.querySelector('#submit').onclick = function (e) {
-            //e.preventDefault()
+            e.preventDefault()
             //e.stopPropagation()
 
             const messageInputDom = document.querySelector('#input');
@@ -50,6 +76,7 @@
             chatSocket.send(JSON.stringify({
                 'message': message,
                 'username': user_username,
+                'user_id': user_id,
             }));
             messageInputDom.value = '';
         };
@@ -69,16 +96,18 @@
             const data = JSON.parse(a.data);
             console.log(data)
             document.querySelector('#chat-text').innerHTML += ( 
-                data.username ? 
-                data.username + ': ' + data.message + "\n"
-                : 
-                "anonymous: " + data.message + "\n" 
+                data.username ?
+                "<p style='margin-bottom:10px; margin-left:auto; margin-right:0; background: #99ffaa; color: #000; width: fit-content; padding: 10px; border-radius: 1rem; '><strong style='color: #40489d'>" + data.username.charAt(0).toUpperCase() + data.username.slice(1)  + ': '+ "</strong>" + data.message + "</p>"
+                :
+                "Anonymous: " + data.message.toString() + "\n"
                 )
         }
 
     </script>
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 
 
@@ -93,6 +122,4 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
     </script>
-</body>
-
-</html>
+{% endblock content %}

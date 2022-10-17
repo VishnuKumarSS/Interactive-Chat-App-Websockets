@@ -1,15 +1,148 @@
-from email import message
+import pdb
 from django.shortcuts import render, redirect
+from chat.models import Messages, Room
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
+from django.db.models import Q
+# from django.contrib.auth.forms import AuthenticationForm
 
-from chat.models import Messages
-# from chat.forms import MessagesForm
+def home(request):
+    return render(request, 'home.html', {})
+
+def room(request, room_name):
+    room = Room.objects.filter(name=room_name).first()
+    # messages = []
+    all_messages = []
+    if request.user.is_authenticated:
+        user = User.objects.get(username=request.user.username)
+        if room:
+            # messages = Messages.objects.filter(room=room).filter(user=user)
+            # other_messages = Messages.objects.filter(room=room).filter(~Q(user=user))
+            all_messages = Messages.objects.filter(room=room)
+        else:
+            room = Room(name=room_name)
+            room.save()
+
+    context={
+        # 'messages': messages,
+        'room_name': room_name,
+        'all_messages': all_messages,
+    }
+    return render(request,'chatroom.html',context)
 
 
-def index(request):
-    return render(request, 'index.html', {})
+def signup_view(request):
+    context = {}
+    if request.user.is_authenticated: # if the user is already authenticated
+        return redirect('/chat/home')
+    if request.method == 'POST': # if user filled the form
+        form = UserCreationForm(request.POST) # passing the data's for further use
+        if form.is_valid(): # this is the function of above django's UserCreatingForm
+            form.save() # saving form for further use
+            username = request.POST['username'] # entered_username
+            password = request.POST['password1'] # entered_password
+            # check_user = User.objects.filter(username=username).exists()
+            # if not check_user: # if it's new user
+            #     new_user = User.objects.create_user(username=username, password=password)
+            #     new_user.save()
+            user = authenticate(request, username=username, password=password)
+            if user:
+                login(request, user)
+                return redirect('/chat/home')
+        else:
+            print('Form is not valid!')
+            return render(request, 'signup.html', {'form': form})
+    else:
+        # context['form'] = UserCreationForm() # if user opening the page for first time
+        print('First time opened')
+        return render(request, 'signup.html', context)
+
+def signin_view(request):
+    context= {}
+    # form = LoginForm()
+    # context['form'] = form
+    if request.user.is_authenticated:
+        # return render(request, 'home.html')
+        return redirect('/chat/home')
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            return redirect('/chat/home')
+        else:
+            # form = AuthenticationForm(request.POST)
+            return render(request, 'signin.html', context)
+    else:
+        # form = AuthenticationForm()
+        return render(request, 'signin.html', context)
+
+def signout_view(request):
+    logout(request)
+    return redirect('/chat/home')
 
 
-def room(request, room_name):    
+
+
+
+
+
+
+
+
+
+
+
+
+# def login_view(request):
+#     if request.POST:
+#         form = LoginForm(request.POST)
+#         if form.is_valid():
+#             email = request.POST['email']
+#             password = request.POST['password']
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# def room(request, room_name):
+
+    # if request.is_ajax and request.method == 'POST':
+    #     # form = MessagesForm()
+    #     # if request.method=='POST':
+    #     form = MessagesForm(request.POST)
+    #     if form.is_valid():
+    #         instance = form.save()
+    #         serialize_instance = serializers.serialize('json', [ instance ])
+    #         return JsonResponse({"instance": serialize_instance}, status=200)
+    #     else:
+    #         # some form errors occured.
+    #         return JsonResponse({"error": form.errors}, status=400)
+    # return JsonResponse({"error": ""}, status=400)
+
     # if request.method == 'POST':
     #     # obj = Messages(message=request.POST["msg"])
     #     obj = Messages.objects.create()
@@ -17,19 +150,28 @@ def room(request, room_name):
     #     # obj.username = request.user.username
     #     obj.username = "usernamee"
     #     obj.save()
-    return render(request, 'chatroom.html', {
-        'room_name': room_name
-    })
+    # return render(request, 'chatroom.html', {
+    #     'room_name': room_name
+    # })
 
-
+ 
     # form = MessagesForm()
     # if request.method=='POST':
     #     form = MessagesForm(request.POST)
+    #     # pdb.set_trace()
     #     if form.is_valid():
     #         form.save()
-    #         # return redirect('home/')
+    #         return redirect('home/')
     # context={
     #     'form':form,
+    #     'room_name': room_name
+    # }
+    # return render(request,'chatroom.html',context)
+    # all_users = Messages.objects.filter(date=datetime.date.today())
+    # date = all_users[0].date
+    # context={
+    #     'all_users': all_users,
+    #     'date': date,
     #     'room_name': room_name
     # }
     # return render(request,'chatroom.html',context)

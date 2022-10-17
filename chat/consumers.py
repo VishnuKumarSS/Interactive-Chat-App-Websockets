@@ -1,9 +1,10 @@
-from email.message import Message
 import json
+import pdb
+from unicodedata import name
 from channels.generic.websocket import AsyncWebsocketConsumer
-
-from chat.models import Messages
-
+from channels.db import database_sync_to_async
+from chat.models import Messages, Room
+    
 class ChatRoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name'] # it updates the room_name in routing.py in our app.
@@ -26,6 +27,21 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         username = text_data_json['username']
+        # user_id = text_data_json['user_id']
+        self.user_id = self.scope['user'].id
+
+        # find room object
+        room = await database_sync_to_async(Room.objects.get)(name=self.room_name)
+
+        # new message object
+        msg = Messages(
+            user=self.scope['user'], 
+            message=message, 
+            room=room
+        )
+
+        await database_sync_to_async(msg.save)()
+        # pdb.set_trace()
 
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -33,21 +49,22 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
                 'type': 'chatroom_message',
                 'message': message,
                 'username': username,
+                'user_id': self.user_id,
             }
         )
 
     async def chatroom_message(self, event):
         message = event['message']
         username = event['username']
-        neww = Messages(message=message, username=username)
-        neww.save()
+        user_id = event['user_id']
+
         await self.send(text_data=json.dumps({
             'message': message,
             'username': username,
+            'user_id': user_id,
         }))
         # the json dumps converts the python object to a json string .
 
-        # https://www.geeksforgeeks.org/json-dump-in-python/#:~:text=The%20dump()%20method%20is,be%20stored%20as%20an%20argument.
 
 
 

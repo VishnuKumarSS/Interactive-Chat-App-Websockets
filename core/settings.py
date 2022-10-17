@@ -118,7 +118,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -132,7 +133,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 ASGI_APPLICATION = "core.routing.application"
-
+# STATICFILES_DIRS = [
+#     "/static/styles",
+#     "/static/images",
+# ]
 
 # CHANNEL_LAYERS = {
 #     'default': {
@@ -167,5 +171,8 @@ CHANNEL_LAYERS = {
 # The view processes the request and returns an HTTP response to the client.
 # Unlike HTTP, the WebSockets protocol allows bi-directional communication, meaning that the server can push data to the client without being prompted by the user. With HTTP, only the client that made a request receives a response. With WebSockets, the server can communicate with multiple clients simultaneously. As we will see later on in this tutorial, we send WebSockets messages using the ws:// prefix, as opposed to http://.
 
-# admin - admin_user
+# admin - vishnuu
 # password - <system_pass>
+
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField' # warning: auto-created primary key used when not defining a primary key type, by default 'django.db.models.AutoField'.
