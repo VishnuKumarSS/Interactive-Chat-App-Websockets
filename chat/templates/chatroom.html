@@ -17,16 +17,21 @@
     <div class="container">
         <div class="row d-flex justify-content-center">
             <div class="col-6">
-                <form >
-                    <div class="form-group" >
+                
+                <form method="POST">
+                    {% comment %} <form action="{% url 'chat:room' %}" method="POST"> {% endcomment %}
+                    {% csrf_token %}
+                    <div class="form-group">
                         <center><label for="exampleFormControlTextarea1" class="h4 pt-5">CHATROOM</label></center>
                         <textarea class="form-control" style="border: 3px solid #000; border-radius: 1rem; height: 300px; " id="chat-text" rows="10"></textarea><br>
                     </div>
                     <div class="form-group">
-                        <input class="form-control" style="border: 3px solid #000; border-radius: 1rem;" id="input" type="text" placeholder="Enter your message here"></br>
+                        <label class="form-label">Type here.</label>
+                        <input name="msg" class="form-control" style="border: 3px solid #000; border-radius: 1rem;" id="input" type="text" placeholder="Enter your message here"></br>
                     </div>
                     <button class="btn btn-primary btn-lg btn-block" style="border-radius: 1rem;" id="submit" type="submit">Send</button>
                 </form>
+
             </div>
         </div>
     </div>
@@ -36,17 +41,18 @@
     <script>
         const user_username = JSON.parse(document.getElementById('user_username').textContent);
         document.querySelector('#submit').onclick = function (e) {
-            e.preventDefault()
+            //e.preventDefault()
+            //e.stopPropagation()
 
             const messageInputDom = document.querySelector('#input');
             const message = messageInputDom.value;
+            
             chatSocket.send(JSON.stringify({
                 'message': message,
                 'username': user_username,
             }));
             messageInputDom.value = '';
         };
-
 
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
         // if we want to turn an json string to object then we use parse. It will convert the json string to key value pair.
@@ -69,6 +75,7 @@
                 "anonymous: " + data.message + "\n" 
                 )
         }
+
     </script>
 
 

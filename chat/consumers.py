@@ -1,5 +1,8 @@
+from email.message import Message
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
+
+from chat.models import Messages
 
 class ChatRoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -36,7 +39,8 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
     async def chatroom_message(self, event):
         message = event['message']
         username = event['username']
-
+        neww = Messages(message=message, username=username)
+        neww.save()
         await self.send(text_data=json.dumps({
             'message': message,
             'username': username,
