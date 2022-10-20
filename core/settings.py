@@ -9,9 +9,13 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+from dotenv import load_dotenv
 
+load_dotenv()
 from pathlib import Path
 import os
+import pdb
+# import 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,8 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'chat',
     'channels',
-    'dajaxice',
-    'dajax',
 ]
 
 MIDDLEWARE = [
@@ -92,7 +94,24 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '',
     }
+    # "nonrel": {
+    #     "ENGINE": "djongo",
+    #     "NAME": 'chatroom_database_mongo',
+    #     # "CLIENT": {
+    #     #     "host": os.getenv('MONGO_DB_HOST'),
+    #     #     "port": int(os.getenv('MONGO_DB_PORT')),
+    #     #     "username": os.getenv('MONGO_DB_USERNAME'),
+    #     #     "password": os.getenv('MONGO_DB_PASSWORD'),
+    #     # },
+    #     # 'TEST': {
+    #     #     'MIRROR': 'default',
+    #     # },
+    # }
 }
+# Base url to serve media files
+MEDIA_URL = '/media/'
+# Path where media is stored
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -132,11 +151,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+# STATICFILES_DIRS = [BASE_DIR/'static']
+
 ASGI_APPLICATION = "core.routing.application"
-# STATICFILES_DIRS = [
-#     "/static/styles",
-#     "/static/images",
-# ]
 
 # CHANNEL_LAYERS = {
 #     'default': {
@@ -163,16 +180,5 @@ CHANNEL_LAYERS = {
     }
 }
 
-# WebSockets vs HTTP
-# Normally, Django uses HTTP to communicate between the client and server:
-
-# The client sends an HTTP request to the server.
-# Django parses the request, extracts a URL, and then matches it to a view.
-# The view processes the request and returns an HTTP response to the client.
-# Unlike HTTP, the WebSockets protocol allows bi-directional communication, meaning that the server can push data to the client without being prompted by the user. With HTTP, only the client that made a request receives a response. With WebSockets, the server can communicate with multiple clients simultaneously. As we will see later on in this tutorial, we send WebSockets messages using the ws:// prefix, as opposed to http://.
-
-# admin - vishnuu
-# password - <system_pass>
-
-
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField' # warning: auto-created primary key used when not defining a primary key type, by default 'django.db.models.AutoField'.
+# DATABASE_ROUTERS = ['chat.utils.db_routers.NonRelRouter', ]

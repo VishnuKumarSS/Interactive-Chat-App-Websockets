@@ -1,17 +1,11 @@
-from django.db import models
-
 import datetime
+from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-# from django.contrib.auth import get_user_model
-# User=get_user_model()
-
+from djongo import models as mongo_models
 
 class Messages(models.Model):
-    # username = models.CharField(max_length = 40, default="anonymous")
     user = models.ForeignKey(User, on_delete = models.CASCADE) # blank=True # blank = True is used when system need to give some empty string '' to match the other fields... Its's mainly used when system need to give some data.
-    # sender = models.ForeignKey(User, on_delete = models.CASCADE, null=True) # blank=True
-    # receiver = models.ForeignKey(User, on_delete= models.CASCADE, blank=True)
     message = models.CharField(max_length = 50)
     created_on = models.DateTimeField(auto_now_add=True)
     room = models.ForeignKey('Room', on_delete=models.CASCADE)  
@@ -30,3 +24,39 @@ class Room(models.Model):
     def __str__(self):
         return f"{self.name}" 
 
+class ImageUpload(models.Model):
+    user = models.ForeignKey(User, on_delete = models.CASCADE )
+    room = models.ForeignKey('Room', on_delete=models.CASCADE)  
+    title = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='images')
+
+    def __str__(self):
+        return f"{self.title}"
+
+# class Log(mongo_models.Model):
+#     id = mongo_models.ObjectIdField()
+#     message = mongo_models.TextField(max_length=1000)
+
+#     created_at = mongo_models.DateTimeField(auto_now_add=True)
+#     updated_at = mongo_models.DateTimeField(auto_now=True)
+
+#     class Meta:
+#         _use_db = 'nonrel'
+#         ordering = ("-created_at", )
+
+#     def __str__(self):
+#         return self.message
+
+# class ImageUploadMongo(mongo_models.Model):
+#     id = mongo_models.ObjectIdField()
+#     Image = mongo_models.TextField(max_length=1000)
+#
+#     created_at = mongo_models.DateTimeField(auto_now_add=True)
+#     updated_at = mongo_models.DateTimeField(auto_now=True)
+#
+#     class Meta:
+#         _use_db = 'nonrel'
+#         ordering = ("-created_at", )
+#
+#     def __str__(self):
+#         return self.id

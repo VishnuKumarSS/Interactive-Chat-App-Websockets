@@ -16,6 +16,7 @@ Chat_App | Web_Socket
                 <form action="{% url 'chat:room' room_name %}" method="POST">
                     {% comment %} <form action="{% url 'chat:room' %}" method="POST"> {% endcomment %}
                     {% csrf_token %}
+<!--                     {{ image_form.as_p }}-->
                     <div class="form-group">
                         <center >
                             <p style="background-color:#fff; border: 3px solid #000; width: auto; font-weight: bold; font-size:2rem; border-radius:1rem; margin: 30px; position:relative; padding:0.5rem;">
@@ -33,10 +34,19 @@ Chat_App | Web_Socket
                                         <p style='margin-bottom:10px; background: #40489d; color: #fff; width: fit-content; padding: 10px; border-radius: 1rem;'><strong style='color: #99ffaa'>{{msg.user.username | capfirst}}:</strong> {{msg.message}}</p>
                                     {% endif %}
                                 {% endfor %}
+                                {% for img in all_images %}
+                                    {% if img.user.id is request.user.id %}
+                                        <p style='margin-bottom:10px; margin-left:auto; margin-right:0; background: #99ffaa; color: #000; width: fit-content; padding: 10px; border-radius: 1rem;'><strong style='color: #40489d'>{{img.user.username | capfirst}}:</strong> {{img.title}}</p>
+                                        <img width="300" style='border-radius:10px; border: 3px solid #99ffaa; max-height:100%; max-width:100%; object-fit: contain; margin-bottom:10px; margin-left:auto; margin-right:0;' src="{{ img.image.url }}" alt="image" >
+                                    {% else %}
+                                        <p style='margin-bottom:10px; background: #40489d; color: #fff; width: fit-content; padding: 10px; border-radius: 1rem;'><strong style='color: #99ffaa'>{{img.user.username | capfirst}}:</strong> {{img.title}}</p>
+                                        <img width="300" style='border-radius:10px; border: 3px solid #40489d; max-height:100%; max-width:100%; object-fit: contain; margin-bottom:3px;' src="{{ img.image.url}}" alt="image" >
+                                    {% endif %}
+                                {% endfor %}
                             {% comment %} {% else %} {% endcomment %}
                                 {% comment %} <h3>No message found. Start messaging.</h3> {% endcomment %}
                             {% comment %} {% endif %} {% endcomment %}
-                            <h3 style="font-weight: bold;">{{date}}</h3>
+                            {% comment %} <h3 style="font-weight: bold;">{{date}}</h3> {% endcomment %}
                         </div>
 
                     </div>
@@ -44,8 +54,8 @@ Chat_App | Web_Socket
                     <div class="form-group">
                         <input name="msg" class="form-control" style="height:60px; font-size: 20px;border: 3px solid #000; border-radius: 1rem;" id="input" type="text" placeholder="Enter your message here">
                     </div>
-
                     <center>
+                    <p style='margin-top: 10px; width:fit-content; color:#000; border-radius:1rem; background-color:#fff; padding:10px;' class="text-center"><a style='text-decoration: none' href="/chat/image_upload">Upload Image</a></p>
                     <button style="color: #000; width:250px; font-size:22px; border-radius: 1rem; border: 3px solid #000; font-weight: bold; background-color: #90CAF9; padding: 10px;" id="submit" type="submit">Send</button>
                     <center>
                 </form>
@@ -57,12 +67,13 @@ Chat_App | Web_Socket
     {{ request.user.id|json_script:"user_id" }}
     {{ room_name|json_script:"room-name" }}
     {% else %}
-    <center>
-    <h1 style='background:#EF5350; margin: 50px; border-radius: 1rem; padding:1rem; width: fit-content;'>Please try to login to view room messages.</h1>
-    <p style='margin-top: 10px; width:fit-content; color:#000; border-radius:1rem; background-color:#fff; padding:10px;' class="text-center">If you already have an account - <a style='text-decoration: none' href="/chat/signin">SignIn</a></p>
-    <p style='margin-top: 10px; width:fit-content; color:#000; border-radius:1rem; background-color:#fff; padding:10px;' class="text-center">Don't have an account? <a style='text-decoration: none' href="/chat/signup">Signup</a></p>    
-    </center>
+        <center>
+        <h1 style='background:#EF5350; margin: 50px; border-radius: 1rem; padding:1rem; width: fit-content; color: #fff;'>Please login and try again.</h1>
+        <p style='margin-top: 10px; width:fit-content; color:#000; border-radius:1rem; background-color:#fff; padding:10px;' class="text-center">If you already have an account - <a style='text-decoration: none' href="/chat/signin">SignIn</a></p>
+        <p style='margin-top: 10px; width:fit-content; color:#000; border-radius:1rem; background-color:#fff; padding:10px;' class="text-center">Don't have an account? <a style='text-decoration: none' href="/chat/signup">Signup</a></p>    
+        </center>
     {% endif %}
+
     <script>
         const user_username = JSON.parse(document.getElementById('user_username').textContent);
         const user_id = JSON.parse(document.getElementById('user_id').textContent);

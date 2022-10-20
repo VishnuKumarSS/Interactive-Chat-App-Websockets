@@ -1,34 +1,61 @@
 import pdb
 from django.shortcuts import render, redirect
-from chat.models import Messages, Room
+from chat.models import ImageUpload, Messages, Room
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 # from django.contrib.auth.forms import AuthenticationForm
+from .forms import ImageForm
+
+
+def image_upload_view(request):
+    """Process images uploaded by users"""
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+        # pdb.set_trace()
+        if form.is_valid():
+            form.save()
+            # pdb.set_trace()
+            # Get the current instance object to display in the template
+            img_obj = form.instance # it will return the image model object
+            # return render(request, 'image_upload.html', {'form': form, 'img_obj': img_obj})
+            return redirect('/chat/new')
+    else:
+        form = ImageForm()
+    return render(request, 'image_upload.html', {'form': form})
 
 def home(request):
     return render(request, 'home.html', {})
 
 def room(request, room_name):
+    context = {}
     room = Room.objects.filter(name=room_name).first()
-    # messages = []
+    # images = ImageUpload.objects.filter(name=room_name).first()
+    # pdb.set_trace()
     all_messages = []
+    all_images = []
     if request.user.is_authenticated:
         user = User.objects.get(username=request.user.username)
         if room:
             # messages = Messages.objects.filter(room=room).filter(user=user)
             # other_messages = Messages.objects.filter(room=room).filter(~Q(user=user))
             all_messages = Messages.objects.filter(room=room)
+            all_images = ImageUpload.objects.filter(room=room).order_by('-id')
         else:
             room = Room(name=room_name)
             room.save()
 
-    context={
-        # 'messages': messages,
-        'room_name': room_name,
-        'all_messages': all_messages,
-    }
+    context['room_name'] = room_name
+    context['all_messages'] = all_messages
+    context['all_images'] = all_images
+    # pdb.set_trace()
+    # context['image_form'] = image_form
+    # {
+    #     'room_name': room_name,
+    #     'all_messages': all_messages,
+    #     'image_form': image_form,
+    # }
     return render(request,'chatroom.html',context)
 
 

@@ -1,3 +1,23 @@
+
+from django import forms
+from .models import ImageUpload
+
+
+class ImageForm(forms.ModelForm):
+    """Form for the image model"""
+    class Meta:
+        model = ImageUpload
+        fields = ('user','room', 'title', 'image')
+
+
+
+
+
+
+
+
+
+
 # from django import forms
 # from chat.models import Messages
 # from django.contrib.auth.models import User
