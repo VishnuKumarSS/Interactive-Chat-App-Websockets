@@ -16,7 +16,6 @@ Chat_App | Web_Socket
                 <form action="{% url 'chat:room' room_name %}" method="POST">
                     {% comment %} <form action="{% url 'chat:room' %}" method="POST"> {% endcomment %}
                     {% csrf_token %}
-<!--                     {{ image_form.as_p }}-->
                     <div class="form-group">
                         <center >
                             <p style="background-color:#fff; border: 3px solid #000; width: auto; font-weight: bold; font-size:2rem; border-radius:1rem; margin: 30px; position:relative; padding:0.5rem;">
@@ -25,6 +24,14 @@ Chat_App | Web_Socket
                         </center>
                         {% comment %} flex-direction: column-reverse; ----- It will reverse the whole div (reverse the elements inside the div if you've removed flex-direction){% endcomment %}
                         <div class="paragraph-div" style="flex-direction: column-reverse; display: flex;  background-color: #fff;height:350px; overflow-y: auto;  border: 3px solid #000; border-radius: 1rem; padding:1rem;">
+                            {% comment %} {% if img_url %}
+                                <img width="300" style='border-radius:10px; border: 3px solid #99ffaa; max-height:100%; max-width:100%; object-fit: contain; margin-bottom:10px; margin-left:auto; margin-right:0;' src="data:image/jpeg;base64, {{ img_url }}" alt = 'test_img' >
+                            {% endif %} {% endcomment %}
+                            {% if images %}
+                                {% for img in images %}
+                                    <img width="300" style='border-radius:10px; border: 3px solid #99ffaa; max-height:100%; max-width:100%; object-fit: contain; margin-bottom:10px; margin-left:auto; margin-right:0;' src="data:image/jpeg;base64, {{ img.url }}" alt = 'test_img' >
+                                {% endfor %}
+                            {% endif %}
                             <p id="chat-text"></p>
 
                                 {% for msg in all_messages %}
@@ -34,19 +41,20 @@ Chat_App | Web_Socket
                                         <p style='margin-bottom:10px; background: #40489d; color: #fff; width: fit-content; padding: 10px; border-radius: 1rem;'><strong style='color: #99ffaa'>{{msg.user.username | capfirst}}:</strong> {{msg.message}}</p>
                                     {% endif %}
                                 {% endfor %}
-                                {% for img in all_images %}
-                                    {% if img.user.id is request.user.id %}
-                                        <p style='margin-bottom:10px; margin-left:auto; margin-right:0; background: #99ffaa; color: #000; width: fit-content; padding: 10px; border-radius: 1rem;'><strong style='color: #40489d'>{{img.user.username | capfirst}}:</strong> {{img.title}}</p>
-                                        <img width="300" style='border-radius:10px; border: 3px solid #99ffaa; max-height:100%; max-width:100%; object-fit: contain; margin-bottom:10px; margin-left:auto; margin-right:0;' src="{{ img.image.url }}" alt="image" >
-                                    {% else %}
-                                        <p style='margin-bottom:10px; background: #40489d; color: #fff; width: fit-content; padding: 10px; border-radius: 1rem;'><strong style='color: #99ffaa'>{{img.user.username | capfirst}}:</strong> {{img.title}}</p>
-                                        <img width="300" style='border-radius:10px; border: 3px solid #40489d; max-height:100%; max-width:100%; object-fit: contain; margin-bottom:3px;' src="{{ img.image.url}}" alt="image" >
-                                    {% endif %}
-                                {% endfor %}
-                            {% comment %} {% else %} {% endcomment %}
-                                {% comment %} <h3>No message found. Start messaging.</h3> {% endcomment %}
-                            {% comment %} {% endif %} {% endcomment %}
-                            {% comment %} <h3 style="font-weight: bold;">{{date}}</h3> {% endcomment %}
+
+
+                                {% comment %}
+                                    {% for img in all_images %}
+                                        {% if img.user.id is request.user.id %}
+                                            <p style='margin-bottom:10px; margin-left:auto; margin-right:0; background: #99ffaa; color: #000; width: fit-content; padding: 10px; border-radius: 1rem;'><strong style='color: #40489d'>{{img.user.username | capfirst}}:</strong> {{img.title}}</p>
+                                            <img width="300" style='border-radius:10px; border: 3px solid #99ffaa; max-height:100%; max-width:100%; object-fit: contain; margin-bottom:10px; margin-left:auto; margin-right:0;' src="{{ img.image.url }}" alt="image" >
+                                        {% else %}
+                                            <p style='margin-bottom:10px; background: #40489d; color: #fff; width: fit-content; padding: 10px; border-radius: 1rem;'><strong style='color: #99ffaa'>{{img.user.username | capfirst}}:</strong> {{img.title}}</p>
+                                            <img width="300" style='border-radius:10px; border: 3px solid #40489d; max-height:100%; max-width:100%; object-fit: contain; margin-bottom:3px;' src="{{ img.image.url}}" alt="image" >
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endcomment %}
+
                         </div>
 
                     </div>
@@ -55,7 +63,9 @@ Chat_App | Web_Socket
                         <input name="msg" class="form-control" style="height:60px; font-size: 20px;border: 3px solid #000; border-radius: 1rem;" id="input" type="text" placeholder="Enter your message here">
                     </div>
                     <center>
-                    <p style='margin-top: 10px; width:fit-content; color:#000; border-radius:1rem; background-color:#fff; padding:10px;' class="text-center"><a style='text-decoration: none' href="/chat/image_upload">Upload Image</a></p>
+                        {% if room_name %}
+                    <p style='margin-top: 10px; width:fit-content; color:#000; border-radius:1rem; background-color:#fff; padding:10px;' class="text-center"><a style='text-decoration: none' href="/chat/{{ room_name }}/upload">Upload Image</a></p>
+                        {% endif %}
                     <button style="color: #000; width:250px; font-size:22px; border-radius: 1rem; border: 3px solid #000; font-weight: bold; background-color: #90CAF9; padding: 10px;" id="submit" type="submit">Send</button>
                     <center>
                 </form>

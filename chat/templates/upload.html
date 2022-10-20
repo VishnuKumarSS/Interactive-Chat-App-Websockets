@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>MONGO DB Image Upload Check</h1>
+<h3>Succesfully uploaded: {{img_title}}</h3>
+<h3>{{ uploaded }}</h3>
+<img width="300" src="data:image/jpeg;base64,{{ img_url }}" alt = 'test_img' style="max-height: 300px">
+{% comment %} <img width="300" src="{{ img_url }}" alt = 'test_img' style="max-height: 300px"> {% endcomment %}
+<h5> Image : {{ img }} </h5>
+
+<form  method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <label for="img_id">Select image:</label>
+  <input type="file" id="img_id" name="img_name" >
+  <input name="title_name" class="form-control" id="title_id"  type="text" placeholder="Enter Title: ">
+  <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>
