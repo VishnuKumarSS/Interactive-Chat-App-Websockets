@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<body>
+<form  method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="img_id">Select image:</label>
+    <input type="file" id="img_id" name="img_name">
+    {% comment %} <input name="title_name" class="form-control" id="title_id"  type="text" placeholder="Enter Title: "> {% endcomment %}
+    <button type="submit">Submit</button>
+</form>
+
+
+{% if request.method == "POST" %}
+  <p>Successfully uploaded: {{img}}</p>
+  <img width="300" src="{{ img.image.url }}" alt = 'test_img' style="max-height: 300px">
+{% endif %}
+
+{% for i in images %}
+  <p>File: {{i.image}}</p>
+  <img width="300" src="{{ i.image.url }}" alt = 'test_img' style="max-height: 300px">
+{% endfor %}
+
+</body>
+</html>

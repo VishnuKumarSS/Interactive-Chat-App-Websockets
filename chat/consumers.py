@@ -1,5 +1,4 @@
 import json
-import pdb
 from unicodedata import name
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
@@ -35,13 +34,12 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
 
         # new message object
         msg = Messages(
-            user=self.scope['user'], 
-            message=message, 
+            user=self.scope['user'],
+            message=message,
             room=room
         )
 
         await database_sync_to_async(msg.save)()
-        # pdb.set_trace()
 
         await self.channel_layer.group_send(
             self.room_group_name,

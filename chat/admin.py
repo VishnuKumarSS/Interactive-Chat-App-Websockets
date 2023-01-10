@@ -5,3 +5,4 @@ from .models import Messages, Room
 
 admin.site.register(Messages)
 admin.site.register(Room)
+# admin.site.register(SampleImage)

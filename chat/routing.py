@@ -3,7 +3,7 @@ from django.urls import re_path
 from . import consumers
 
 websocket_urlpatterns = [
-    re_path(r'ws/chatt/(?P<room_name>\w+)/$', consumers.ChatRoomConsumer.as_asgi()), 
+    re_path(r'ws/chatt/room/(?P<room_name>\w+)/$', consumers.ChatRoomConsumer.as_asgi()), 
 ]
 
 # here w is match word characters. Match any words with any length ....This match Alphabets Upper and Lower case and numbers..0 to 9 and the underscore...
