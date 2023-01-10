@@ -30,14 +30,14 @@ Chat_App | Web_Socket
                   <span class="name">{{msg.user.username | capfirst}}: </span>{{msg.message}}
                 </p>
                 {% if msg.image %}
-                  <img class="user-img" width="300" src="{{ msg.image.image.url }}" alt="{{ msg.image.title }}">
+                  <img class="user-img" src="{{ msg.image.image.url }}" alt="{{ msg.image.title }}">
                 {% endif %}
               {% else %}
                 <p class='others-message'>
                   <span class="name">{{msg.user.username | capfirst}}: </span>{{msg.message}}
                 </p>
                 {% if msg.image %}
-                  <img class="others-img" width="300" src="{{ msg.image.image.url }}" alt="{{ msg.image.title }}">
+                  <img class="others-img" src="{{ msg.image.image.url }}" alt="{{ msg.image.title }}">
                 {% endif %}
               {% endif %}
               {% endfor %}
@@ -52,24 +52,20 @@ Chat_App | Web_Socket
               placeholder="Enter your message here">
           </div>
           <center>
+          <div style="display:flex; justify-content:space-around; align-items:center;  text-align:center;">
             {% if room_name %}
             {% comment %} href="/chat/room/{{ room_name }}/image_upload/" {% endcomment %}
-            {% comment %} <p style='margin-top: 10px; width:fit-content; color:#000; border-radius:1rem; background-color:#fff; padding:10px;'
-              class="text-center"><a style='text-decoration: none' href="{{request.get_full_path}}image_upload">Upload
-                Image</a></p> {% endcomment %}
-                <button
-                style="color: #000; width:250px; font-size:22px; border-radius: 1rem; border: 3px solid #000; font-weight: bold; background-color: #c7d2fe; padding: 10px;">
-                <a style='text-decoration: none; color:#000' href="{{request.get_full_path}}image_upload">Upload
-                  Image
+                <a style="color: #000; width:250px; font-size:22px; border-radius: 1rem; border: 3px solid #000; font-weight: bold; background-color: #c7d2fe; padding: 10px; text-decoration: none;"  href="{{request.get_full_path}}image_upload">
+                  Upload Image
                 </a>
-              </button>
 
             {% endif %}
             <button
               style="color: #000; width:250px; font-size:22px; border-radius: 1rem; border: 3px solid #000; font-weight: bold; background-color: #90CAF9; padding: 10px;"
               id="submit" type="submit">SEND
             </button>
-          </center>
+        </div>
+        </center>
         </form>
     </div>
   </div>
