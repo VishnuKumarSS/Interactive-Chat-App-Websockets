@@ -1,3 +1,4 @@
+import pdb
 import traceback
 from django.shortcuts import render, redirect
 from chat.models import ImageUpload, Messages, Room
@@ -17,7 +18,18 @@ def home(request):
     :param request: HTTP Request
     :return: HTTP Response
     """
-    return render(request, 'home.html', {})
+    context = {}
+    rooms_list = []
+    try:
+        if request.method == 'POST':
+            custom_roomname = request.POST['input_roomname']
+            return redirect(f'/chat/room/{custom_roomname}')
+        else:
+            rooms_list = Room.objects.all()
+            context['rooms_list'] = rooms_list        
+    except Exception as error:
+        print(error)
+    return render(request, 'home.html', context)
 
 
 def room(request, room_name):

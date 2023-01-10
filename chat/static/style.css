@@ -11,7 +11,7 @@ body {
   background-color: #fff;
   height: 350px;
   overflow-y: auto;
-  border: 3px solid #000;
+  border: 3px solid #2e2e2e;
   border-radius: 1rem;
   padding: 1rem;
 }
@@ -24,7 +24,7 @@ body {
   margin-left: auto;
   margin-right: 0;
   background: #99ffaa;
-  color: #000;
+  color: #2e2e2e;
   width: fit-content;
   padding: 10px;
   border-radius: 1rem;
@@ -63,4 +63,54 @@ body {
   max-width: 300px;
   object-fit: contain;
   margin-bottom: 3px;
+}
+
+.msg-img-send-button {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+}
+.send-button {
+  color: #2e2e2e;
+  width: 250px;
+  font-size: 1.25rem;
+  border-radius: 1rem;
+  border: 3px solid #2e2e2e;
+  font-weight: bold;
+  background-color: #90caf9;
+  padding: 10px;
+}
+.upload-image-button {
+  color: #2e2e2e;
+  width: 250px;
+  font-size: 1.25rem;
+  border-radius: 1rem;
+  border: 3px solid #2e2e2e;
+  font-weight: bold;
+  background-color: #fff;
+  padding: 10px;
+  text-decoration: none;
+}
+.form-control {
+  height: 3rem;
+  font-size: 1rem;
+  border: 3px solid #2e2e2e;
+  border-radius: 1rem;
+}
+.room-name {
+  background-color: #fff;
+  /* border: 3px solid #2e2e2e; */
+  width: auto;
+  font-weight: 900;
+  font-size: 2rem;
+  border-radius: 1rem;
+  margin: 30px;
+  position: relative;
+  padding: 0.5rem;
+}
+
+.form-label {
+  font-weight: 800;
+  font-size: 1.1rem;
 }

@@ -1,4 +1,34 @@
-{% extends 'base.html' %}
-{% block content %}
-Create a room by adding room name on the url.
+{% extends 'base.html' %} {% block content %} {% load static %} {% block head %}
+<link rel="stylesheet" href="{% static '/home.css' %}" />
+{% endblock head %}
+<div class="container">
+  <div class="row d-flex justify-content-center">
+    <div class="main-div col-12">
+      <div class="heading-div">
+        <h1 class="heading">LIST OF ROOMS</h1>
+      </div>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="custom-room-div" >
+            <input
+              type="text"
+              class="form-control"
+              name="input_roomname"
+              required
+              placeholder="Enter any room name here . . ."
+            />
+            <button class='custom-join'>Join</button>
+        </div>  
+      </form>
+      <div class="list-of-rooms">
+        {% for roomname in rooms_list%}
+        <div class="room-div">
+          <p class="room-name">{{roomname}}</p>
+          <a href="/chat/room/{{roomname}}" class="join">Join</a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}
