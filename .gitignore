@@ -1,3 +1,5 @@
 venv
 .env
 media
+migrations
+__pycache__

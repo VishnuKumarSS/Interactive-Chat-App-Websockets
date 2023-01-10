@@ -1,6 +1,0 @@
-python manage.py shell
-
-from chat.models import Messages, User, Room
-User.objects.all()
-Room.objects.all()
-Messages.objects.all()

@@ -87,8 +87,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'chatroom_database',
-        'USER': 'chatroom_user',
-        'PASSWORD': 'chatroom_password',
+        'USER': 'vishnu',
+        'PASSWORD': 'starzzzz',
         'HOST': 'localhost',
         'PORT': '',
     }
