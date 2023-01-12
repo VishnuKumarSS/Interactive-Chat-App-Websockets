@@ -5,7 +5,7 @@ from .views import home, signup_view, signin_view, room, signout_view, image_upl
 app_name = 'chat'
 
 urlpatterns = [
-    path('home/', home, name='home'),
+    path('', home, name='home'),
     path('room/<str:room_name>/', room, name='room'),
     path('signup/', signup_view, name='signup_namespace'),
     path('signin/', signin_view, name='signin_namespace'),

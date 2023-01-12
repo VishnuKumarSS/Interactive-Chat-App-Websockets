@@ -59,7 +59,7 @@ Chat_App | Web_Socket
           <center>
           <div class='msg-img-send-button'>
             {% if room_name %}
-            {% comment %} href="/chat/room/{{ room_name }}/image_upload/" {% endcomment %}
+            {% comment %} href="/room/{{ room_name }}/image_upload/" {% endcomment %}
                 <a class='upload-image-button' href="{{request.get_full_path}}image_upload">
                   Upload Image
                 </a>
@@ -86,9 +86,9 @@ Chat_App | Web_Socket
     LOGIN TO CONTINUE
   </h1>
 
-  <p style='margin-top: 10px; width:fit-content; color:#2e2e2e; border-radius:1rem; background-color:#fff; padding:1rem;' class="text-center">Already have an account? <a style='text-decoration: none; font-weight: 800;' href="/chat/signin">SignIn</a></p>
+  <p style='margin-top: 10px; width:fit-content; color:#2e2e2e; border-radius:1rem; background-color:#fff; padding:1rem;' class="text-center">Already have an account? <a style='text-decoration: none; font-weight: 800;' href="/signin">SignIn</a></p>
 
-  <p style='margin-top: 10px; width:fit-content; color:#2e2e2e; border-radius:1rem; background-color:#fff; padding:1rem;' class="text-center">Don't have an account? <a style='text-decoration: none; font-weight:800;' href="/chat/signup">Register</a></p>
+  <p style='margin-top: 10px; width:fit-content; color:#2e2e2e; border-radius:1rem; background-color:#fff; padding:1rem;' class="text-center">Don't have an account? <a style='text-decoration: none; font-weight:800;' href="/signup">Register</a></p>
 
 </center>
 {% endif %}

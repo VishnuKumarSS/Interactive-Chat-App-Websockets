@@ -23,7 +23,7 @@ def home(request):
     try:
         if request.method == 'POST':
             custom_roomname = request.POST['input_roomname']
-            return redirect(f'/chat/room/{custom_roomname}')
+            return redirect(f'/room/{custom_roomname}')
         else:
             rooms_list = Room.objects.all()
             context['rooms_list'] = rooms_list        
@@ -68,7 +68,7 @@ def image_upload_view(request, room_name):
             # return render(request, 'image_upload.html', {'form': form, 'img_obj': img_obj})
             room_obj = Room.objects.filter(name=room_name).first()
             Messages.objects.create(user=request.user, message=img_obj.title, room=room_obj, image=img_obj)
-            return redirect(f'/chat/room/{room_name}/')
+            return redirect(f'/room/{room_name}/')
     else:
         form = ImageForm()
     return render(request, 'image_upload.html', {'form': form})
@@ -84,7 +84,7 @@ def signup_view(request):
     context = {}
 
     if request.user.is_authenticated: # if the user is already authenticated
-        return redirect('/chat/home')
+        return redirect('/')
 
     if request.method == 'POST':  # if user filled the form
         form = UserCreationForm(request.POST)  # passing the data's for further use
@@ -97,7 +97,7 @@ def signup_view(request):
 
             if user:
                 login(request, user)
-                return redirect('/chat/home')
+                return redirect('/')
 
         else:
             print('Form is not valid!')
@@ -117,14 +117,14 @@ def signin_view(request):
     """
     context = {}
     if request.user.is_authenticated:
-        return redirect('/chat/home')
+        return redirect('/')
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return redirect('/chat/home')
+            return redirect('/')
         else:
             return render(request, 'signin.html', context)
     else:
@@ -139,7 +139,7 @@ def signout_view(request):
     :return: HTTP Response
     """
     logout(request)
-    return redirect('/chat/home')
+    return redirect('/')
 
 
 # def room(request, room_name):
