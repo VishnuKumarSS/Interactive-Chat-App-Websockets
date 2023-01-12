@@ -9,7 +9,7 @@ body {
   flex-direction: column-reverse;
   display: flex;
   background-color: #fff;
-  height: 350px;
+  height: 60vh;
   overflow-y: auto;
   border: 3px solid #2e2e2e;
   border-radius: 1rem;
