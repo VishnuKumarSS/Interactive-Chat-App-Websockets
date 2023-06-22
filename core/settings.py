@@ -29,7 +29,7 @@ SECRET_KEY = 'czq5w9hzxlrag0k3$gt+zwglzo&9&1e()_evo&3$j*jewz7jf7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1', '.vercel.app']
+ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1', '.vercel.app', '.railway.app']
 
 # Application definition
 
@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'core.wsgi.app'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -152,7 +152,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 # STATICFILES_DIRS = [BASE_DIR/'static']
 
-ASGI_APPLICATION = "core.routing.app"
+ASGI_APPLICATION = "core.routing.application"
 
 # CHANNEL_LAYERS = {
 #     'default': {
