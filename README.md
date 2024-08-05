@@ -12,7 +12,7 @@ Before accessing the chat application's features and engaging in real-time commu
 - Dashboard with list of rooms to join
 
 ## 📚 What I've learned
-- Focused a lot on learning websockets and django hannels
+- Focused a lot on learning websockets and django channels
 - Learnt the MongoDB integration in python using pymongo
 - Asynchronous bi-directional communication
 - And much more...
